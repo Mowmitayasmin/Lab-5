@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEntryForm } from "../../hooks/useEntryForm";
-import { Edit } from "lucide-react";
+import { Edit, TrashIcon } from "lucide-react";
 import useEmployeRolse from "../../hooks/useEmployeRolse";
 
 export interface EmployeeDepartment {
@@ -10,7 +9,8 @@ export interface EmployeeDepartment {
 }
 
 export function EmployeeList() {
-  const { setSearchstr, searchStr, filteredDepartments } = useEmployeRolse([]);
+  const { setSearchstr, searchStr, filteredDepartments, handleDeleteEmployee } =
+    useEmployeRolse([]);
   const navigate = useNavigate();
   return (
     <main className="p-6 max-w-3xl mx-auto bg-white shadow-md rounded-xl">
@@ -33,21 +33,37 @@ export function EmployeeList() {
       </div>
 
       <div id="employee-list" className="space-y-4">
-        {filteredDepartments.map((x, i) => (
+        {filteredDepartments?.map((x , i) => (
           <div
             key={i}
             className="p-4 border border-gray-200 rounded-lg bg-gray-50 hover:shadow-sm transition"
+            onClick={() => navigate(`/employee/${x.id}`)}
           >
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-lg font-semibold text-blue-600">
                 {x.department}
               </h3>
-              <button
-                className="p-1.5 rounded-full hover:bg-gray-100 transition"
-                onClick={() => navigate(`/employee/${x.id}/edit`)}
-              >
-                <Edit className="w-5 h-5 text-gray-600" />
-              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/employee/${x.id}/edit`);
+                  }}
+                  className="p-2 rounded-full hover:bg-blue-100 transition"
+                >
+                  <Edit className="w-5 h-5 text-blue-600" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteEmployee(x?.id);
+                  }}
+                  className="p-2 rounded-full hover:bg-red-100 transition"
+                >
+                  <TrashIcon className="w-5 h-5 text-red-600" />
+                </button>
+              </div>
             </div>
 
             <ul className="pl-4 text-gray-700 space-y-1">
