@@ -1,19 +1,6 @@
 // prisma/seed.ts
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-// -- Table: Department
-// CREATE TABLE Department (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     department VARCHAR(255) NOT NULL,
-//     employees JSON
-// );
-
-// -- Table: Role
-// CREATE TABLE Role (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     title VARCHAR(255) NOT NULL,
-//     description VARCHAR(255) NOT NULL
-// );
 
 async function main() {
   await prisma.role.createMany({
