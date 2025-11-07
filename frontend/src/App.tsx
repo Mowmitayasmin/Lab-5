@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import UpdateRole from "./components/organization/UpdateRole";
 import CreateEmployee from "./components/employee-list/CreateEmployee";
 import UpdateEmployee from "./components/employee-list/UpdateEmployee";
+import EmployeeDetails from "./components/employee-list/EmployeeDetails";
 
 function NotFound() {
   return <h2>Page Not Found</h2>;
@@ -28,6 +29,7 @@ function App() {
         <Route path="/employees" element={<EmployeeList />} />
         <Route path="/create-employee" element={<CreateEmployee />} />
         <Route path="employee/:id/edit" element={<UpdateEmployee />} />
+        <Route path="/employee/:id" element={<EmployeeDetails />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
