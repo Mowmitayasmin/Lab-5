@@ -1,13 +1,10 @@
 import  { useState } from "react";
 import { ChevronUp, ChevronDown, Edit, TrashIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import type { Organizationdata } from "../../hooks/useEntryForm";
 
 interface ExpandProps {
-  x: {
-    id: string | number;
-    title: string;
-    description: string;
-  };
+  x: Organizationdata;
   handleDelete: (id: string | number) => void;
 }
 
@@ -35,7 +32,7 @@ const Expand = ({ x, handleDelete }: ExpandProps) => {
           </button>
 
           <button
-            onClick={() => handleDelete(x.id)}
+            onClick={() => handleDelete(x?.id)}
             className="p-1 rounded hover:bg-red-200 text-red-600"
           >
             <TrashIcon />
