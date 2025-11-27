@@ -15,4 +15,5 @@ export const employeeSchema = Joi.object({
   id: Joi.string().optional(),
   department: requiredString("Department"),
   employees: requiredString("employees"),
+  userId: Joi.string().optional(),
 }).options({ allowUnknown: true });

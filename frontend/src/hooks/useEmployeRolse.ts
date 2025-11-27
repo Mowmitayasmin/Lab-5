@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 
 import * as EmployeeService from "../services/employee";
+
 import { toast } from "react-toastify";
 import type { DepartmentEmployee } from "../components/employee-list/EmployeeForm";
+import { useAuth } from "@clerk/clerk-react";
 const useEmployeRolse = (dependencies: unknown[]) => {
+  const { getToken } = useAuth();
   const [searchStr, setSearchstr] = useState("");
   const [error, setError] = useState<string | null>();
   const [departmentEmployee, setDepartmentEmployee] = useState<
@@ -31,7 +34,8 @@ const useEmployeRolse = (dependencies: unknown[]) => {
 
   const fetchDept = async () => {
     try {
-      const result = await EmployeeService.fetchEmployee();
+      const sessionToken = (await getToken()) ?? "";
+      const result = await EmployeeService.fetchEmployee(sessionToken);
       setDepartmentEmployee([...result]);
     } catch (errorObject) {
       setError(`${errorObject}`);
@@ -39,8 +43,11 @@ const useEmployeRolse = (dependencies: unknown[]) => {
   };
   const handleDeleteEmployee = async (id: number | string | undefined) => {
     if (!id) return;
+    const sessionToken = (await getToken()) ?? "";
+    const res = await EmployeeService.deleteEmployee(id, sessionToken);
+     console.log("🚀 ~ handleDeleteEmployee ~ res:", res)
+     
     setDepartmentEmployee((prev) => prev.filter((e) => e.id !== id));
-    await EmployeeService.deleteEmployee(id);
     toast("Successfully deleted Role!", {
       position: "bottom-center",
       theme: "light",

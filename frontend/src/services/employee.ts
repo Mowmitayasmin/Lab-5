@@ -5,25 +5,31 @@ export interface Dept {
   department: string;
   employees: string;
 }
-export async function fetchEmployee() {
-  const employee = await employeeRepo.getEmployee();
+export async function fetchEmployee(sessionToken: string) {
+  const employee = await employeeRepo.getEmployee(sessionToken);
   return employee;
 }
 
-export async function createNewDept(dept: Dept) {
-  return await employeeRepo.createNewDept(dept);
+export async function createNewDept(dept: Dept, sessionToken: string) {
+  return await employeeRepo.createNewDept(dept, sessionToken);
 }
 
-export async function updateDepartment(dept: Dept) {
-  return await employeeRepo.updateDepartment(dept);
+export async function updateDepartment(dept: Dept, sessionToken: string) {
+  return await employeeRepo.updateDepartment(dept, sessionToken);
 }
-export async function deleteEmployee(id: string | number) {
-  return await employeeRepo.deleteDepartment(id);
+export async function deleteEmployee(
+  id: string | number,
+  sessionToken: string
+) {
+  return await employeeRepo.deleteDepartment(id, sessionToken);
 }
 
-export async function ValidateDept(dept: DepartmentEmployee) {
+export async function ValidateDept(
+  dept: DepartmentEmployee,
+  sessionToken: string
+) {
   const validationErrors = new Map<string, string>();
-  const existingDepartments = await employeeRepo.getEmployee();
+  const existingDepartments = await employeeRepo.getEmployee(sessionToken);
   if (dept.department.trim().length < 3) {
     validationErrors.set(
       "department",

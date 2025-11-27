@@ -1,5 +1,5 @@
-import prisma from "../../prisma/client";
 import { Role } from "../types/rolesType";
+import prisma from "../utils/prisma";
 
 export const fetchAllRoles = async (): Promise<Role[]> => {
   const data = await prisma.role.findMany({});

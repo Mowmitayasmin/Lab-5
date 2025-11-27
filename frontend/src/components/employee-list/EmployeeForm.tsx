@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import * as EmployeeService from "../../services/employee";
 import useEmployeRolse from "../../hooks/useEmployeRolse";
+import { useAuth } from "@clerk/clerk-react";
 interface Employee {
   id: number;
   name: string;
@@ -24,6 +25,7 @@ const DepartmentEmployeeForm = ({
   formMode,
   id,
 }: DepartmentEmployeeFormProps) => {
+  const { getToken } = useAuth();
   const navigate = useNavigate();
   const { departmentEmployee } = useEmployeRolse([]);
   const [departmentName, setDepartmentName] = useState("");
@@ -70,21 +72,28 @@ const DepartmentEmployeeForm = ({
       department: departmentName.trim(),
       employees,
     };
-    const deptError = await EmployeeService.ValidateDept(payload);
+    const sessionToken = (await getToken()) ?? "";
+    const deptError = await EmployeeService.ValidateDept(payload, sessionToken);
     setErrors(deptError);
     if (!deptError.size) {
       if (formMode === "create") {
-        await EmployeeService.createNewDept({
-          ...payload,
-          employees: JSON.stringify(employees),
-        });
+        await EmployeeService.createNewDept(
+          {
+            ...payload,
+            employees: JSON.stringify(employees),
+          },
+          sessionToken
+        );
         toast.success(`Department "${departmentName}" created successfully!`);
       } else {
-        await EmployeeService.updateDepartment({
-          ...payload,
-          id: id,
-          employees: JSON.stringify(employees),
-        });
+        await EmployeeService.updateDepartment(
+          {
+            ...payload,
+            id: id,
+            employees: JSON.stringify(employees),
+          },
+          sessionToken
+        );
         toast.success(`Department "${departmentName}" updated successfully!`);
       }
       navigate("/employees");

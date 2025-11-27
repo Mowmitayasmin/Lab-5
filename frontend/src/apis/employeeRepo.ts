@@ -1,8 +1,13 @@
 import type { Dept } from "../services/employee";
 
 export const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;
-export async function getEmployee() {
-  const response = await fetch(`${BASE_URL}/employee`);
+export async function getEmployee(sessionToken: string) {
+  const response = await fetch(`${BASE_URL}/employee`, {
+    headers: {
+      Authorization: `Bearer ${sessionToken}`,
+    },
+  });
+
   if (!response.ok) {
     throw new Error("Failed to fetch role");
   }
@@ -10,12 +15,13 @@ export async function getEmployee() {
   return json;
 }
 
-export async function createNewDept(employee: Dept) {
+export async function createNewDept(employee: Dept, sessionToken: string) {
   const response = await fetch(`${BASE_URL}/employee/create`, {
     method: "POST",
     body: JSON.stringify({ ...employee }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionToken}`,
     },
   });
   if (!response.ok) {
@@ -24,7 +30,7 @@ export async function createNewDept(employee: Dept) {
   const json = await response.json();
   return json;
 }
-export async function updateDepartment(dept: Dept) {
+export async function updateDepartment(dept: Dept, sessionToken: string) {
   const updateResponse: Response = await fetch(
     `${BASE_URL}/employee/update/${dept.id}`,
     {
@@ -33,6 +39,8 @@ export async function updateDepartment(dept: Dept) {
       body: JSON.stringify({ ...dept }),
       headers: {
         "Content-Type": "application/json",
+
+        Authorization: `Bearer ${sessionToken}`,
       },
     }
   );
@@ -43,11 +51,14 @@ export async function updateDepartment(dept: Dept) {
   const json = await updateResponse.json();
   return json;
 }
-export async function deleteDepartment(id: string | number) {
+export async function deleteDepartment(id: string | number, sessionToken: string) {
   const employeeResponse: Response = await fetch(
     `${BASE_URL}/employee/delete/${id}`,
     {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${sessionToken}`,
+      },
     }
   );
 
